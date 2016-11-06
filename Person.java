@@ -6,9 +6,10 @@ import java.util.*;
  * @author ley
  */
 public class Person {
+	
     private static int maxPublCount = 0;
     private static int maxNameLength = 0;
-    private static Map personMap = new HashMap(600000);
+    private static Map personMap = new HashMap(60000);
     private static Set tmpSet = new HashSet(500);
     
     private String name;
