@@ -11,10 +11,10 @@ public class GUI extends JFrame{
 		this.setLocationRelativeTo(null);
 		//Toolkit tk = Toolkit.getDefaultToolkit();
 		this.setResizable(false);
-		JPanel startPanel = new JPanel();
+		JPanel startPanel = new JPanel(new GridBagLayout());
 		startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.PAGE_AXIS));
 		JLabel label1 = new JLabel("DBLP Query Engine");
-		label1.setFont(new Font("Serif", Font.PLAIN, 14));
+		label1.setFont(new Font("Serif", Font.PLAIN, 32));
     	label1.setForeground(Color.GRAY);
 		label1.setAlignmentX(startPanel.CENTER_ALIGNMENT);
 		//label1.setText("Tic Tac Toe");
