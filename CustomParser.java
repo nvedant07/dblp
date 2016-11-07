@@ -34,6 +34,9 @@ public class CustomParser {
                 Value = "";
                 return;
             }
+		//delete this portion
+		
+		//end portion
             if ((atts.getLength()>0) && ((k = atts.getValue("key"))!=null)) {
                 key = k;
                 recordTag = rawName;   
