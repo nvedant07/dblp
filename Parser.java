@@ -146,6 +146,7 @@ public class Parser {
    
    Parser(String uri) {
       try {
+    	 System.setProperty("jdk.xml.entityExpansionLimit", "0");
 	     SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 	     SAXParser parser = parserFactory.newSAXParser();
 	     ConfigHandler handler = new ConfigHandler();

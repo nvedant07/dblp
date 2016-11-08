@@ -12,7 +12,7 @@ import java.util.*;
  * created first in project xml5_coauthor_graph
  */
 public class Publication {
-    private static Set ps= new HashSet(650000);
+    private static Set ps= new HashSet();
     private static int maxNumberOfAuthors = 0;
     private String key;
     private Person[] authors;	// or editors
