@@ -9,10 +9,12 @@ public class GUI extends JFrame{
 	public GUI(){
 		this.setSize(640,480);
 		this.setLocationRelativeTo(null);
-		//Toolkit tk = Toolkit.getDefaultToolkit();
 		this.setResizable(false);
-		JPanel startPanel = new JPanel(new GridBagLayout());
-		startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.PAGE_AXIS));
+		JPanel startPanel = new JPanel();
+		BorderLayout layout = new BorderLayout();
+		layout.setHgap(10);
+		layout.setVgap(10);
+		startPanel.setLayout(layout); 
 		JLabel label1 = new JLabel("DBLP Query Engine");
 		label1.setFont(new Font("Serif", Font.PLAIN, 32));
     	label1.setForeground(Color.GRAY);
@@ -26,7 +28,8 @@ public class GUI extends JFrame{
 		button2.setAlignmentX(startPanel.CENTER_ALIGNMENT);
 		startPanel.add(button2);
 		String[] choice = { "Query 1", "Query 2", "Query 3"};
-		JComboBox choiceList = new JComboBox(choice);
+		JComboBox<String> choiceList = new JComboBox<String>(choice);
+		startPanel.add(choiceList,BorderLayout.LINE_START);
 		this.add(startPanel);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("VedArpan Project");
