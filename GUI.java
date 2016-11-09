@@ -25,6 +25,8 @@ public class GUI extends JFrame{
 		JButton button2 = new JButton("Exit");
 		button2.setAlignmentX(startPanel.CENTER_ALIGNMENT);
 		startPanel.add(button2);
+		String[] choice = { "Query 1", "Query 2", "Query 3"};
+		JComboBox choiceList = new JComboBox(choice);
 		this.add(startPanel);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("VedArpan Project");
