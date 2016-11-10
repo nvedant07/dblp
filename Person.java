@@ -13,7 +13,7 @@ public class Person {
     private static Set tmpSet = new HashSet();
     
     private String name;
-    private Set nameParts;
+    //private Set nameParts;
     private int count;
     private int tmp;
     private Publication[] publs;
