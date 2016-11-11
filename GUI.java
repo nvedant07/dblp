@@ -23,6 +23,7 @@ public class GUI extends JFrame{
 		label1.setFont(new Font("Serif", Font.PLAIN, 32));
     	label1.setForeground(Color.GRAY);
 		startPanel.add(label1, BorderLayout.PAGE_START);
+		JPanel play;
 		String[] choice = { "Query 1", "Query 2", "Query 3"};
 		JComboBox<String> choiceList = new JComboBox<String>(choice);
 		menu.add(choiceList);
