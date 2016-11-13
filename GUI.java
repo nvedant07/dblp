@@ -19,11 +19,11 @@ public class GUI extends JFrame{
 		startPanel.add(canvas, BorderLayout.LINE_END);
 		JPanel menu = new JPanel();
 		startPanel.add(menu, BorderLayout.LINE_START);
-		JLabel label1 = new JLabel("DBLP Query Engine");
+		JLabel label1 = new JLabel("DBLP Query Engine", SwingConstants.CENTER);
 		label1.setFont(new Font("Serif", Font.PLAIN, 32));
     	label1.setForeground(Color.GRAY);
-		label1.setAlignmentX(startPanel.CENTER_ALIGNMENT);
 		startPanel.add(label1, BorderLayout.PAGE_START);
+		JPanel play;
 		String[] choice = { "Query 1", "Query 2", "Query 3"};
 		JComboBox<String> choiceList = new JComboBox<String>(choice);
 		menu.add(choiceList);
