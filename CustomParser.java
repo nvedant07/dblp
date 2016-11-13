@@ -8,41 +8,135 @@ import org.xml.sax.helpers.*;
 
 public class CustomParser {
    
-   private final int maxAuthorsPerPaper = 200;
-
    private class ConfigHandler extends DefaultHandler {
 
         private Locator locator;
-
         private String Value;
+        private String masterTag;
+        private boolean insideMasterTag;
         private String key;
         private String recordTag;
-        private int flag=0;
-//        private Person[] persons= new Person[maxAuthorsPerPaper];
-        private ArrayList<Person> persons=new ArrayList<Person>();
-        private int numberOfPersons = 0;
-
-        private boolean insidePerson;
-
+        private boolean insideTag;
+        private ArrayList<String> authors=new ArrayList<String>();
+        private String url;
+        private String pages;
+        private int year;
+        private String title;
+        private String journal;
+        private String booktitle;
+        private String volume;
+        
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
         }
-
-        public void startElement(String namespaceURI, String localName,
-                String rawName, Attributes atts) throws SAXException {
-	
+        
+        public void print_authors(ArrayList<String> arr){
+    		for(int j=0;j<arr.size();j++){
+    			if(j==arr.size()-1){
+    				System.out.println(arr.get(j));
+    			}
+    			else{
+    				System.out.print(arr.get(j)+",");
+    			}
+    			
+    		}
+    	}
+        
+        public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
+          String k;
+          if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
+                insideMasterTag=true;
+//                this.print_authors(authors);
+                
+                masterTag=rawName;
+//                System.out.println("<"+masterTag+">");
+                // System.out.println(namespaceURI+" "+localName+" "+rawName+" "+atts.getLength());
+          }
+          else if(insideMasterTag){
+            recordTag=rawName;
+            insideTag=true;
+//            System.out.print("<"+recordTag+">");
+            Value = "";
+          }
         }
 
-        public void endElement(String namespaceURI, String localName,
-                String rawName) throws SAXException {
-
+        public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
+        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
+            {
+        		for(int i=0;i<authors.size();i++){
+        			if(DBLP.author_to_search.toLowerCase().equals(authors.get(i).toLowerCase())){
+//        				System.out.println("Found a match!");
+        				Publication temp=new Publication(authors);
+        				if(title!=null){
+        					temp.setTitle(title);
+        				}
+        				if(pages!=null){
+        					temp.setPages(pages);
+        				}
+        				if(year!=0){
+        					temp.setYear(year);
+        				}
+        				if(volume!=null){
+        					temp.setVolume(volume);
+        				}
+        				if(journal!=null){
+        					temp.setJournal(journal);
+        				}
+        				if(booktitle!=null){
+        					temp.setBooktitle(booktitle);
+        				}
+        				if(url!=null){
+        					temp.setUrl(url);
+        				}
+        				DBLP.result_publications.add(temp);
+        			}
+        		}
+        		
+//              System.out.println("</"+masterTag+">");
+              insideMasterTag=false;
+              authors.clear();
+            }
+          else if(insideTag){
+//            System.out.println(Value+"</"+recordTag+">");
+        	  if(!masterTag.equals("www")){
+        		  if(recordTag.equals("author")||recordTag.equals("editor")){
+//        			  System.out.println(Value);
+        			  
+        			  authors.add(Value);
+        		  }
+        		  else if(recordTag.equals("url")){
+        			  url=Value;
+        		  }
+        		  else if(recordTag.equals("year")){
+        			  year=Integer.parseInt(Value);
+        		  }
+        		  else if(recordTag.equals("title")){
+        			  title=Value;
+        		  }
+        		  else if(recordTag.equals("pages")){
+        			  pages=Value;
+        		  }
+        		  else if(recordTag.equals("journal")){
+        			  journal=Value;
+        		  }
+        		  else if(recordTag.equals("booktitle")){
+        			  booktitle=Value;
+        		  }
+        		  else if(recordTag.equals("volume")){
+        			  volume=Value;
+        		  }
+        	  }
+        	  insideTag=false;
+          }
+            																																																																																																																																																																																																																																																																																		
         }
-
 
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
-            if (insidePerson)
-                Value += new String(ch, start, length);
+        	if(insideTag)
+            Value += new String(ch, start, length);
         }
 
         private void Message(String mode, SAXParseException exception) {
@@ -69,61 +163,16 @@ public class CustomParser {
             throw new SAXException("Fatal Error encountered");
         }
     }
-
-   private void nameLengthStatistics() {
-       Iterator i = Person.iterator();
-       Person p;
-       int l = Person.getMaxNameLength();
-       int lengthTable[] = new int[l+1];
-       int j;
-       
-       System.out.println();
-       System.out.println("Name length: Number of persons");
-       while (i.hasNext()) {
-           p = (Person) i.next();
-           lengthTable[p.getName().length()]++;
-       }
-       for (j=1; j <= l; j++) {
-           System.out.print(j + ": " + lengthTable[j]+ "  ");
-           if (j%5 == 0)
-               System.out.println();
-       }
-       System.out.println();
-   }
    
-   private void publicationCountStatistics() {
-       Iterator i = Person.iterator();
-       Person p;
-       int l = Person.getMaxPublCount();
-       int countTable[] = new int[l+1];
-       int j, n;
-       
-       System.out.println();
-       System.out.println("Number of publications: Number of persons");
-       while (i.hasNext()) {
-           p = (Person) i.next();
-           countTable[p.getCount()]++;
-       }
-       n = 0;
-       for (j=1; j <= l; j++) {
-           if (countTable[j] == 0)
-               continue;
-           n++;
-           System.out.print(j + ": " + countTable[j]+ "  ");
-           if (n%5 == 0)
-               System.out.println();
-       }
-       System.out.println();
-   }
-   
-   CustomParser(String uri) {
+   CustomParser(String uri,String author) {
       try {
-    	 System.setProperty("jdk.xml.entityExpansionLimit", "0");
+    	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
 	     SAXParserFactory parserFactory = SAXParserFactory.newInstance();
 	     SAXParser parser = parserFactory.newSAXParser();
 	     ConfigHandler handler = new ConfigHandler();
          parser.getXMLReader().setFeature(
 	          "http://xml.org/sax/features/validation", true);
+         DBLP.author_to_search=author;
          parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());
@@ -133,17 +182,7 @@ public class CustomParser {
          System.out.println("Error in XML parser configuration: " +
 			    e.getMessage());
       }
-      System.out.println("Number of Persons : " + Person.numberOfPersons());
-//      nameLengthStatistics();
-      System.out.println("Number of Publications with authors/editors: " + 
-                         Publication.getNumberOfPublications());
-      System.out.println("Maximum number of authors/editors in a publication: " +
-              			 Publication.getMaxNumberOfAuthors());   
-//      publicationCountStatistics();
-//      Person.enterPublications();
-//      Person.printCoauthorTable();
-//      Person.printNamePartTable();
-//      Person.findSimilarNames();
+      
    }
 
 }

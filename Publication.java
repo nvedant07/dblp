@@ -6,38 +6,80 @@ package dblp;
 
 import java.util.*;
 
-/**
- * @author ley
- *
- * created first in project xml5_coauthor_graph
- */
 public class Publication {
-    //private static Set ps= new HashSet();
-    private static int maxNumberOfAuthors = 0;
-    private String key;
-    private Person[] authors;	// or editors
+//    static String author_to_search;
+    private String title;
+    private String pages;
+    private int year;
+    private String volume;
+    private String booktitle;
+    private String journal;
+    private String url;
+    private ArrayList<String> authors;
+    
+    public Publication(ArrayList<String> authors) {
+        this.authors=new ArrayList<String>();
+    	for(int i=0;i<authors.size();i++){
+    		this.authors.add(authors.get(i));
+    	}
+    }
+    public ArrayList<String> getAuthors(){
+    	return this.authors;
+    }
+	public String getTitle() {
+		return title;
+	}
 
-    public Publication(String key, Person[] persons) {
-        this.key = key;
-        authors = persons;
-        ps.add(this);
-        if (persons.length > maxNumberOfAuthors)
-            maxNumberOfAuthors = persons.length;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getPages() {
+		return pages;
+	}
+
+	public void setPages(String pages) {
+		this.pages = pages;
+	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public String getVolume() {
+		return volume;
+	}
+
+	public void setVolume(String volume) {
+		this.volume = volume;
+	}
+
+	public String getBooktitle() {
+		return booktitle;
+	}
+
+	public void setBooktitle(String booktitle) {
+		this.booktitle = booktitle;
+	}
+
+	public String getJournal() {
+		return journal;
+	}
+
+	public void setJournal(String journal) {
+		this.journal = journal;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
     
-    public static int getNumberOfPublications() {
-        return ps.size();
-    }
-    
-    public static int getMaxNumberOfAuthors() {
-        return maxNumberOfAuthors;
-    }
-    
-    public Person[] getAuthors() {
-        return authors;
-    }
-    
-    static Iterator iterator() {
-        return ps.iterator();
-    }
 }

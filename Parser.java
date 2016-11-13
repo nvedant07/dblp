@@ -30,8 +30,7 @@ public class Parser {
                 String rawName, Attributes atts) throws SAXException {
             String k;
             
-            if (insidePerson = (rawName.equals("author") || rawName
-                    .equals("editor"))) {
+            if (insidePerson = (rawName.equals("author") || rawName.equals("editor"))) {
                 Value = "";
                 return;
             }
