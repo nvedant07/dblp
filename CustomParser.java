@@ -17,7 +17,9 @@ public class CustomParser {
         private String key;
         private String recordTag;
         private boolean insideTag;
+        private boolean insidewww;
         private ArrayList<String> authors=new ArrayList<String>();
+        private ArrayList<String> same_authors=new ArrayList<String>();
         private String url;
         private String pages;
         private int year;
@@ -44,19 +46,29 @@ public class CustomParser {
         
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
+          
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
         		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
                 insideMasterTag=true;
-//                this.print_authors(authors);
-                
                 masterTag=rawName;
-//                System.out.println("<"+masterTag+">");
-                // System.out.println(namespaceURI+" "+localName+" "+rawName+" "+atts.getLength());
+          }
+          else if(rawName.equals("www")){
+        	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
+                  key=k;
+                  if(key.matches("homepages/(.*)")){
+                    insidewww=true;
+                    masterTag=rawName;
+                  }
+                }
           }
           else if(insideMasterTag){
             recordTag=rawName;
             insideTag=true;
-//            System.out.print("<"+recordTag+">");
+            Value = "";
+          }
+          else if(insidewww){
+        	recordTag=rawName;
+            insideTag=true;
             Value = "";
           }
         }
@@ -65,9 +77,8 @@ public class CustomParser {
         	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
           		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
             {
-        		for(int i=0;i<authors.size();i++){
+        		for(int i=0 ; i<authors.size() ; i++){
         			if(DBLP.author_to_search.toLowerCase().equals(authors.get(i).toLowerCase())){
-//        				System.out.println("Found a match!");
         				Publication temp=new Publication(authors);
         				if(title!=null){
         					temp.setTitle(title);
@@ -93,17 +104,22 @@ public class CustomParser {
         				DBLP.result_publications.add(temp);
         			}
         		}
-        		
-//              System.out.println("</"+masterTag+">");
               insideMasterTag=false;
               authors.clear();
             }
-          else if(insideTag){
-//            System.out.println(Value+"</"+recordTag+">");
+        	else if(rawName.equals("www") && insidewww){
+        		insidewww=false;
+        		Person.same_names.add(same_authors);
+        	}
+        	else if(insideTag && insidewww){
+        		if(recordTag.equals("author")){
+        			same_authors.add(Value);
+        		}
+        		insideTag=false;
+        	}
+            else if(insideTag){
         	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
-//        			  System.out.println(Value);
-        			  
         			  authors.add(Value);
         		  }
         		  else if(recordTag.equals("url")){
@@ -173,6 +189,8 @@ public class CustomParser {
          parser.getXMLReader().setFeature(
 	          "http://xml.org/sax/features/validation", true);
          DBLP.author_to_search=author;
+         DBLP.result_publications.clear();
+         Person.same_names.clear();
          parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());

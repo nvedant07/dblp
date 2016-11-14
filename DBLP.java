@@ -19,13 +19,10 @@ public class DBLP {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-//		Parser p = new Parser("dblp.xml");
 		Scanner in=new Scanner(System.in);
 		System.out.println("Enter author name");
 		String author=in.nextLine();
 		author_to_search=author;
-//		System.out.println(author_to_search);
 		CustomParser p = new CustomParser("dblp.xml",author);
 		DBLP dblp=new DBLP();
 		for(int i=0;i<result_publications.size();i++){
@@ -73,6 +70,7 @@ public class DBLP {
 			else{
 				System.out.println(" | NO URL");
 			}
+			
 		}
 	}
 
