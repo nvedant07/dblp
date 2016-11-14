@@ -5,6 +5,7 @@ import java.util.*;
 public class DBLP {
 	static ArrayList<Publication> result_publications=new ArrayList<Publication>();
 	static String author_to_search;
+	static List<List<String>> same_names=new ArrayList<List<String>>();
 	
 	public void print_authors(ArrayList<String> arr){
 		for(int j=0;j<arr.size();j++){
@@ -19,11 +20,17 @@ public class DBLP {
 	}
 	
 	public static void main(String[] args) {
+		//parse www records
+		WwwParser www=new WwwParser("dblp.xml");
+//		System.out.println(Person.same_names.size());
+//		System.out.println(same_names.get(1).toString());
+		//parse and search for string in other records
 		Scanner in=new Scanner(System.in);
 		System.out.println("Enter author name");
 		String author=in.nextLine();
 		author_to_search=author;
 		CustomParser p = new CustomParser("dblp.xml",author);
+		//print the result
 		DBLP dblp=new DBLP();
 		for(int i=0;i<result_publications.size();i++){
 			System.out.print((i+1)+" | ");

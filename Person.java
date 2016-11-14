@@ -7,18 +7,17 @@ import java.util.*;
  */
 public class Person {
 	
-	static ArrayList<ArrayList<String>> same_names=new ArrayList<ArrayList<String>>();
 	
 	private String authorname;
 //	private ArrayList
 	public Person(String authorname){
 		this.authorname=authorname;
 	}
-	public ArrayList<String> give_bucket(){
-		for(int i=0;i<same_names.size();i++){
-			for(int j=0;j<same_names.get(i).size();j++){
-				if(authorname.toLowerCase().equals(same_names.get(i).get(j).toLowerCase())){
-					return same_names.get(i);
+	public List<String> give_bucket(){
+		for(int i=0;i<DBLP.same_names.size();i++){
+			for(int j=0;j<DBLP.same_names.get(i).size();j++){
+				if(authorname.toLowerCase().equals(DBLP.same_names.get(i).get(j).toLowerCase())){
+					return DBLP.same_names.get(i);
 				}
 			}
 		}
