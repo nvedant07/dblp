@@ -74,15 +74,46 @@ public class Query_1 {
 			else{
 				System.out.print(arr.get(j)+",");
 			}
-			
 		}
 	}
 	public void return_query(){
 		Scanner in=new Scanner(System.in);
-		System.out.println("Enter author name");
-		String author=in.nextLine();
-		DBLP.author_to_search=author;
-		CustomParser p = new CustomParser("dblp.xml",author);
+		if(this.search_by_authorname){
+			System.out.println("Enter author name");
+			String author=in.nextLine();
+			DBLP.author_to_search=author;
+			CustomParser p = new CustomParser("dblp.xml",author);
+		}
+		else if(this.search_by_title){
+			System.out.println("Enter title");
+			String title=in.nextLine();
+			DBLP.title_to_search=title;
+			TitleParser t=new TitleParser("dblp.xml",title);
+		}
+		
+		if(!this.sort_by_relevance){
+			Collections.sort(DBLP.result_publications,new Comparator<Publication>(){
+				public int compare(Publication p1,Publication p2){
+					return p2.getYear()-p1.getYear();
+				}
+			});
+		}
+		if(this.since_some_year){
+			for(int i=0;i<DBLP.result_publications.size();i++){
+				if(DBLP.result_publications.get(i).getYear()<this.year){
+					DBLP.result_publications.remove(i);
+					i--;
+				}
+			}
+		}
+		else if(this.bw_two_years){
+			for(int i=0;i<DBLP.result_publications.size();i++){
+				if(DBLP.result_publications.get(i).getYear()<this.start_year || DBLP.result_publications.get(i).getYear()>this.end_year){
+					DBLP.result_publications.remove(i);
+					i--;
+				}
+			}
+		}
 		for(int i=0;i<DBLP.result_publications.size();i++){
 			System.out.print((i+1)+" | ");
 			this.print_authors(DBLP.result_publications.get(i).getAuthors());

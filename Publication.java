@@ -16,12 +16,19 @@ public class Publication {
     private String journal;
     private String url;
     private ArrayList<String> authors;
+    private float matchRatio;
     
     public Publication(ArrayList<String> authors) {
         this.authors=new ArrayList<String>();
     	for(int i=0;i<authors.size();i++){
     		this.authors.add(authors.get(i));
     	}
+    }
+    public float getMatch_ratio(){
+    	return this.matchRatio;
+    }
+    public void setMatch_ratio(float f){
+    	this.matchRatio=f;
     }
     public ArrayList<String> getAuthors(){
     	return this.authors;
