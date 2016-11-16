@@ -73,6 +73,47 @@ public class TitleParser {
             {
         		List<String> words_of_title=Arrays.asList(title.split(" "));
         		List<String> words_of_query=Arrays.asList(DBLP.title_to_search.split(" "));
+        		int [] label1=new int[words_of_title.size()];
+        		int [] label2=new int[words_of_query.size()];
+        		int count=0;
+        		for(int i=0;i<words_of_query.size();i++){
+        			for(int j=0; j<words_of_title.size();j++){
+        				if(words_of_title.get(j).toLowerCase().equals(words_of_query.get(i).toLowerCase()) && label1[j]==0 && label2[i]==0){
+        					label1[j]=1;
+        					label2[i]=1;
+        					count++;
+        					break;
+        				}
+        			}
+        		}
+        		float match_ratio=(float)count/words_of_title.size();
+        		float self_ratio=(float)count/words_of_query.size();
+        		if(match_ratio>0.5 && self_ratio>0.3){
+        			Publication temp=new Publication(authors);
+    				if(title!=null){
+    					temp.setTitle(title);
+    				}
+    				if(pages!=null){
+    					temp.setPages(pages);
+    				}
+    				if(year!=0){
+    					temp.setYear(year);
+    				}
+    				if(volume!=null){
+    					temp.setVolume(volume);
+    				}
+    				if(journal!=null){
+    					temp.setJournal(journal);
+    				}
+    				if(booktitle!=null){
+    					temp.setBooktitle(booktitle);
+    				}
+    				if(url!=null){
+    					temp.setUrl(url);
+    				}
+    				temp.setMatch_ratio(match_ratio);
+    				DBLP.result_publications.add(temp);
+        		}
               insideMasterTag=false;
               authors.clear();
             }

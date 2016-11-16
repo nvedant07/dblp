@@ -98,6 +98,15 @@ public class Query_1 {
 				}
 			});
 		}
+		else if(this.sort_by_relevance){
+			Collections.sort(DBLP.result_publications,new Comparator<Publication>(){
+				public int compare(Publication p1,Publication p2){
+					if (p2.getMatch_ratio()>p1.getMatch_ratio()) return 1;
+					if (p2.getMatch_ratio()<p1.getMatch_ratio()) return -1;
+					return 0;
+				}
+			});
+		}
 		if(this.since_some_year){
 			for(int i=0;i<DBLP.result_publications.size();i++){
 				if(DBLP.result_publications.get(i).getYear()<this.year){
