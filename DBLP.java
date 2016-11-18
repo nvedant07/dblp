@@ -7,10 +7,14 @@ public class DBLP {
 	static String author_to_search;
 	static String title_to_search;
 	static List<List<String>> same_names=new ArrayList<List<String>>();
+	static HashMap<String,Integer> author_count=new HashMap<String,Integer>();
 	
 	public static void main(String[] args) {
 		//parse www records
+		System.out.println("Loading Data...");
 		WwwParser www=new WwwParser("dblp.xml");
+		AuthorParser par=new AuthorParser("dblp.xml");
+		System.out.println("Data successfully loaded!");
 		//to be moved to GUI
 		Scanner in=new Scanner(System.in);
 		while(true){
@@ -89,6 +93,11 @@ public class DBLP {
 					}
 				}
 				q.return_query();
+			}
+			else if(opt==2){
+				System.out.println("Enter k:");
+				int k=in.nextInt();
+				Query_2 q=new Query_2(k);
 			}
 		}
 	}

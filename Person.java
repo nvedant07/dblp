@@ -3,13 +3,11 @@ package dblp;
 import java.util.*;
 
 /**
- * @author ley
+ * @author vedant
  */
 public class Person {
 	
-	
 	private String authorname;
-//	private ArrayList
 	public Person(String authorname){
 		this.authorname=authorname;
 	}

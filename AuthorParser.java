@@ -1,87 +1,87 @@
 package dblp;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
+import javax.xml.parsers.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
-
-
-public class WwwParser {
-	private class ConfigHandler extends DefaultHandler {
+public class AuthorParser {
+   
+   private class ConfigHandler extends DefaultHandler {
 
         private Locator locator;
         private String Value;
+        private String masterTag;
+        private boolean insideMasterTag;
         private String key;
         private String recordTag;
-        private String masterTag;
-        private boolean foundAuthor;
         private boolean insideTag;
-        private boolean insidewww;
-        private ArrayList<String> same_authors=new ArrayList<String>();
+        private ArrayList<String> authors=new ArrayList<String>();
+        private String url;
+        private String pages;
+        private int year;
+        private String title;
+        private String journal;
+        private String booktitle;
+        private String volume;
         
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
         }
         
+        public void print_authors(ArrayList<String> arr){
+    		for(int j=0;j<arr.size();j++){
+    			if(j==arr.size()-1){
+    				System.out.println(arr.get(j));
+    			}
+    			else{
+    				System.out.print(arr.get(j)+",");
+    			}
+    			
+    		}
+    	}
+        
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
           
-          if(rawName.equals("www")){
-        	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
-                  key=k;
-                  if(key.matches("homepages/(.*)")){
-                    insidewww=true;
-                    masterTag=rawName;
-                  }
-                }
+          if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
+                insideMasterTag=true;
+                masterTag=rawName;
           }
-          else if(insidewww){
-        	recordTag=rawName;
+          else if(insideMasterTag){
+            recordTag=rawName;
             insideTag=true;
             Value = "";
           }
-//          else if(!insidewww && rawName.equals("author")){
-//        	  foundAuthor=true;
-//        	  Value="";
-//          }
+          
         }
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
-        	if(rawName.equals("www") && insidewww){
-        		insidewww=false;
-        		
-        		if(same_authors.size()>0){
-        			ArrayList<String> temp=new ArrayList<String>();
-        			for(String s: same_authors){
-        				temp.add(s);
+        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
+            {
+        		for(int i=0 ; i<authors.size() ; i++){
+        			if(DBLP.author_count.containsKey(authors.get(i))){
+        				int update=DBLP.author_count.get(authors.get(i))+1;
+        				DBLP.author_count.replace(authors.get(i), update);
         			}
-        			DBLP.same_names.add(temp);
-//        			if(!DBLP.same_names.get(DBLP.same_names.size()-1).toString().equals(same_authors.toString())){
-//        				System.out.println("problem");
-//        			}
+        			else{
+        				DBLP.author_count.put(authors.get(i), 1);
+        			}
         		}
-        		same_authors.clear();
-        	}
-        	else if(insideTag && insidewww){
-        		if(recordTag.equals("author")){
-        			same_authors.add(Value);
-        		}
-        		insideTag=false;
-        	}
-//        	else if(foundAuthor && !insidewww){
-//        		if(DBLP.author_count.containsKey(Value))DBLP.author_count.put(Value, DBLP.author_count.get(Value)+1);
-//        		else DBLP.author_count.put(Value, 1);
-//        		foundAuthor=false;
-//        	}
+              insideMasterTag=false;
+              authors.clear();
+            }
+            else if(insideTag){
+        	  if(!masterTag.equals("www")){
+        		  if(recordTag.equals("author")||recordTag.equals("editor")){
+        			  authors.add(Value);
+        		  }
+        	  }
+        	  insideTag=false;
+            }																																																																																																																																																																																																																																																																														
         }
 
         public void characters(char[] ch, int start, int length)
@@ -115,7 +115,7 @@ public class WwwParser {
         }
     }
    
-   WwwParser(String uri) {
+   AuthorParser(String uri) {
       try {
     	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
 	     SAXParserFactory parserFactory = SAXParserFactory.newInstance();
@@ -123,8 +123,7 @@ public class WwwParser {
 	     ConfigHandler handler = new ConfigHandler();
          parser.getXMLReader().setFeature(
 	          "http://xml.org/sax/features/validation", true);
-//         DBLP.author_to_search=author;
-//         DBLP.result_publications.clear();
+         
          parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());
@@ -138,3 +137,5 @@ public class WwwParser {
    }
 
 }
+
+
