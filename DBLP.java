@@ -98,6 +98,7 @@ public class DBLP {
 				System.out.println("Enter k:");
 				int k=in.nextInt();
 				Query_2 q=new Query_2(k);
+				q.print_result();
 			}
 		}
 	}
