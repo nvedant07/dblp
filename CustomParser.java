@@ -177,7 +177,7 @@ public class CustomParser {
 	          "http://xml.org/sax/features/validation", true);
          DBLP.author_to_search=author;
          DBLP.result_publications.clear();
-         
+         DBLP.author_count.clear();
 //         Person.same_names.clear();
          parser.parse(new File(uri), handler);
       } catch (IOException e) {

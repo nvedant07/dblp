@@ -123,7 +123,8 @@ public class AuthorParser {
 	     ConfigHandler handler = new ConfigHandler();
          parser.getXMLReader().setFeature(
 	          "http://xml.org/sax/features/validation", true);
-         
+         DBLP.author_count.clear();
+         DBLP.result_publications.clear();
          parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());

@@ -24,9 +24,11 @@ public class Query_2 {
 				System.out.println(key);
 			}
 		}
+		resolved_count.clear();
 	}
 	public Query_2(int k){
 		this.k=k;
+		AuthorParser par=new AuthorParser("dblp.xml");
 		this.resolve();
 	}
 	
