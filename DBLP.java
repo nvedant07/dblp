@@ -100,6 +100,9 @@ public class DBLP {
 				Query_2 q=new Query_2(k);
 				q.print_result();
 			}
+			else if(opt==3){
+				Query_3 q=new Query_3();
+			}
 		}
 	}
 
