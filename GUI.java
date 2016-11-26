@@ -5,11 +5,13 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class GUI extends JFrame{
+	private JFrame mainframe;
 	
 	public GUI(){
-		this.setSize(640,480);
-		this.setLocationRelativeTo(null);
-		this.setResizable(false);
+		mainframe=this;
+		mainframe.setSize(640,480);
+		mainframe.setLocationRelativeTo(null);
+		mainframe.setResizable(false);
 		JPanel startPanel = new JPanel();
 		BorderLayout layout = new BorderLayout();
 		layout.setHgap(10);
@@ -27,9 +29,9 @@ public class GUI extends JFrame{
 		String[] choice = { "Query 1", "Query 2", "Query 3"};
 		JComboBox<String> choiceList = new JComboBox<String>(choice);
 		menu.add(choiceList);
-		this.add(startPanel);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setTitle("VedArpan Project");
-		this.setVisible(true);
+		mainframe.add(startPanel);
+		mainframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainframe.setTitle("AP Project :: DBLP search engine");
+		mainframe.setVisible(true);
 	}
 }
