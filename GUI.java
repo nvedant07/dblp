@@ -34,4 +34,13 @@ public class GUI extends JFrame{
 		mainframe.setTitle("AP Project :: DBLP search engine");
 		mainframe.setVisible(true);
 	}
+	public void query_1(){
+		
+	}
+	public void query_2(){
+		
+	}
+	public void query_3(){
+		
+	}
 }
