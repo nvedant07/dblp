@@ -1,9 +1,5 @@
 package dblp;
 
-/*
- * Created on 07.06.2005
- */
-
 import java.util.*;
 
 public class Publication {

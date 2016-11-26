@@ -2,9 +2,6 @@ package dblp;
 
 import java.util.*;
 
-/**
- * @author vedant
- */
 public class Person {
 	
 	private String authorname;

@@ -38,7 +38,6 @@ public class TitleParser {
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
         }
-        
         public void print_authors(ArrayList<String> arr){
     		for(int j=0;j<arr.size();j++){
     			if(j==arr.size()-1){
@@ -46,14 +45,11 @@ public class TitleParser {
     			}
     			else{
     				System.out.print(arr.get(j)+",");
-    			}
-    			
+    			}		
     		}
     	}
-        
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
-          
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
         		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
                 insideMasterTag=true;
@@ -64,9 +60,7 @@ public class TitleParser {
             insideTag=true;
             Value = "";
           }
-          
         }
-
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
         	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
           		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
@@ -145,36 +139,28 @@ public class TitleParser {
         		  }
         	  }
         	  insideTag=false;
-          }
-            																																																																																																																																																																																																																																																																																		
+          }   																																																																																																																																																																																																																																																																																		
         }
-
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
         	if(insideTag)
             Value += new String(ch, start, length);
         }
-
         private void Message(String mode, SAXParseException exception) {
             System.out.println(mode + " Line: " + exception.getLineNumber()
                     + " URI: " + exception.getSystemId() + "\n" + " Message: "
                     + exception.getMessage());
         }
-
         public void warning(SAXParseException exception) throws SAXException {
-
             Message("**Parsing Warning**\n", exception);
             throw new SAXException("Warning encountered");
         }
-
         public void error(SAXParseException exception) throws SAXException {
 
             Message("**Parsing Error**\n", exception);
             throw new SAXException("Error encountered");
         }
-
         public void fatalError(SAXParseException exception) throws SAXException {
-
             Message("**Parsing Fatal Error**\n", exception);
             throw new SAXException("Fatal Error encountered");
         }
