@@ -36,10 +36,10 @@ public class GUI extends JFrame{
 		mainframe.setVisible(true);
 	}
 	public void query_1(){
-		
+		Query_1 q=new Query_1();		
 	}
 	public void query_2(){
-		
+		Query_2 q=new Query_2();
 	}
 	public void query_3(){
 		
