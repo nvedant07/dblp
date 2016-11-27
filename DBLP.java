@@ -10,10 +10,11 @@ public class DBLP {
 	static HashMap<String,Integer> author_count=new HashMap<String,Integer>();
 	
 	public static void main(String[] args) {
+		//WwwParser www=new WwwParser("dblp.xml");
 		GUI g = new GUI();
 		//parse www records
 		System.out.println("Loading Data...");
-		WwwParser www=new WwwParser("dblp.xml");
+//		WwwParser www=new WwwParser("dblp.xml");
 //		AuthorParser par=new AuthorParser("dblp.xml");
 		System.out.println("Data successfully loaded!");
 		//to be moved to GUI
