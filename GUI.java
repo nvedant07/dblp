@@ -8,7 +8,7 @@ public class GUI extends JFrame{
 	private JFrame mainframe;
 	
 	public GUI(){
-		WwwParser w=new WwwParser("dblp.xml")
+		WwwParser w=new WwwParser("dblp.xml");
 		mainframe=this;
 		mainframe.setSize(640,480);
 		mainframe.setLocationRelativeTo(null);

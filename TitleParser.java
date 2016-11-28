@@ -16,9 +16,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 
 public class TitleParser {
-
 	private class ConfigHandler extends DefaultHandler {
-
         private Locator locator;
         private String Value;
         private String masterTag;
@@ -51,9 +49,17 @@ public class TitleParser {
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
+        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www")) {
                 insideMasterTag=true;
                 masterTag=rawName;
+                if(rawName.equals("www")){
+              	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
+                        key=k;
+                        if(key.matches("homepages/(.*)")){
+                          insideMasterTag=false;
+                        }
+                    }
+                }
           }
           else if(insideMasterTag){
             recordTag=rawName;
@@ -62,8 +68,8 @@ public class TitleParser {
           }
         }
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
-        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
+        	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www"))&&insideMasterTag)
             {
         		List<String> words_of_title=Arrays.asList(title.split(" "));
         		List<String> words_of_query=Arrays.asList(DBLP.title_to_search.split(" "));
@@ -112,7 +118,7 @@ public class TitleParser {
               authors.clear();
             }
             else if(insideTag){
-        	  if(!masterTag.equals("www")){
+//        	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
         			  authors.add(Value);
         		  }
@@ -137,9 +143,9 @@ public class TitleParser {
         		  else if(recordTag.equals("volume")){
         			  volume=Value;
         		  }
-        	  }
+//        	  }
         	  insideTag=false;
-          }   																																																																																																																																																																																																																																																																																		
+          }																																																																																																																																																																																																																																																			
         }
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
@@ -165,7 +171,6 @@ public class TitleParser {
             throw new SAXException("Fatal Error encountered");
         }
     }
-   
    TitleParser(String uri,String title) {
       try {
     	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
@@ -184,8 +189,6 @@ public class TitleParser {
       } catch (ParserConfigurationException e) {
          System.out.println("Error in XML parser configuration: " +
 			    e.getMessage());
-      }
-      
+      }  
    }
-	
 }

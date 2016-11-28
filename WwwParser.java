@@ -72,7 +72,7 @@ public class WwwParser {
         		same_authors.clear();
         	}
         	else if(insideTag && insidewww){
-        		if(recordTag.equals("author")){
+        		if(recordTag.equals("author")||recordTag.equals("editor")){
         			same_authors.add(Value);
         		}
         		insideTag=false;

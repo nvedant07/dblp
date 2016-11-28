@@ -49,9 +49,17 @@ public class CustomParser {
           String k;
           
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
+        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www")) {
                 insideMasterTag=true;
                 masterTag=rawName;
+                if(rawName.equals("www")){
+                	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
+                          key=k;
+                          if(key.matches("homepages/(.*)")){
+                            insideMasterTag=false;
+                          }
+                      }
+                  }
           }
           else if(insideMasterTag){
             recordTag=rawName;
@@ -62,8 +70,8 @@ public class CustomParser {
         }
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
-        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article"))
+        	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www"))&&insideMasterTag)
             {//        		if(count==1){
 //    			System.out.println(same_authors.toString());
 //        		count++;
@@ -105,7 +113,7 @@ public class CustomParser {
               authors.clear();
             }
             else if(insideTag){
-        	  if(!masterTag.equals("www")){
+//        	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
         			  authors.add(Value);
         		  }
@@ -130,7 +138,7 @@ public class CustomParser {
         		  else if(recordTag.equals("volume")){
         			  volume=Value;
         		  }
-        	  }
+//        	  }
         	  insideTag=false;
           }
             																																																																																																																																																																																																																																																																																		
