@@ -12,6 +12,14 @@ public class GUI extends JFrame{
 	private JPanel canvas;
 	private JPanel startPanel;
 	
+	public void fillCanvas(){
+		for(int i=0;i<21;i++){
+			for(int j=0;j<8;j++){
+				canvas.add(new JButton("press"));
+			}
+		}
+	}
+	
 	public GUI(){
 		mainframe=new JFrame();
 		
@@ -32,8 +40,9 @@ public class GUI extends JFrame{
 		
 		canvas = new JPanel();
 		canvas.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		canvas.setLayout(new GridLayout(8,21));
+		canvas.setLayout(new GridLayout(21,8));
 		startPanel.add(canvas, BorderLayout.LINE_END);
+		fillCanvas();
 		
 		String[] choice = { "Choose Query","Query 1", "Query 2", "Query 3"};
 		this.query_options = new JComboBox<String>(choice);
@@ -54,6 +63,15 @@ public class GUI extends JFrame{
 		end_year.setVisible(false);
 		JLabel helper_range_year=new JLabel("Range(leave blank for all years)");
 		helper_range_year.setVisible(false);
+		JRadioButton sort_by_date=new JRadioButton("Sort By Date");
+		sort_by_date.setSelected(true);
+		sort_by_date.setVisible(false);
+		JRadioButton sort_by_relevance=new JRadioButton("Sort By Relevance");
+		sort_by_relevance.setSelected(false);
+		sort_by_relevance.setVisible(false);
+		ButtonGroup group = new ButtonGroup();
+	    group.add(sort_by_relevance);
+	    group.add(sort_by_date);
 
 		this.query_options.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -62,6 +80,12 @@ public class GUI extends JFrame{
 					q1_box.setVisible(true);
 					helper_query.setVisible(true);
 					search_query.setVisible(true);
+					helper_year.setVisible(true);
+					year.setVisible(true);
+					helper_range_year.setVisible(true);
+					start_year.setVisible(true);
+					end_year.setVisible(true);
+					sort_by_date.setVisible(true);
 				}
 			}
 		});
@@ -75,6 +99,8 @@ public class GUI extends JFrame{
 		menu.add(start_year);
 		menu.add(new JLabel("-"));
 		menu.add(end_year);
+		menu.add(sort_by_date);
+		menu.add(sort_by_relevance);
 		mainframe.add(startPanel);
 		mainframe.setSize(1200,900);
 		mainframe.setLocationRelativeTo(null);
