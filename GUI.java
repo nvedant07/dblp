@@ -3,6 +3,7 @@ package dblp;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.TableColumn;
 
 public class GUI extends JFrame{
 	private JFrame mainframe;
@@ -88,11 +89,15 @@ public class GUI extends JFrame{
 		ButtonGroup group = new ButtonGroup();
 	    group.add(sort_by_relevance);
 	    group.add(sort_by_date);
-	    JLabel dash=new JLabel("-");
+	    JLabel dash=new JLabel("to    ");
 	    dash.setVisible(false);
 	    JButton submit=new JButton("Submit");
 	    submit.setEnabled(false);
 	    JButton refresh=new JButton("Refresh");
+	    JLabel helper_query2=new JLabel("Enter k");
+	    helper_query2.setVisible(false);
+	    JTextField query2=new JTextField(5);
+	    query2.setVisible(false);
 	    
 	    refresh.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
@@ -101,6 +106,7 @@ public class GUI extends JFrame{
 	    		end_year.setText("");
 	    		search_query.setText("");
 	    		sort_by_date.setSelected(true);
+	    		query2.setText("");
 	    	}
 	    });
 		this.query_options.addActionListener(new ActionListener(){
@@ -108,6 +114,24 @@ public class GUI extends JFrame{
 				String choice=(String)query_options.getSelectedItem();
 				if(choice.equals("Query 1")){
 					q1_box.setVisible(true);
+					query2.setVisible(false);
+					helper_query2.setVisible(false);
+				}
+				else if(choice.equals("Query 2")){
+					query2.setVisible(true);
+					helper_query2.setVisible(true);
+					submit.setEnabled(true);
+					q1_box.setVisible(false);
+					helper_query.setVisible(false);
+					search_query.setVisible(false);
+					helper_year.setVisible(false);
+					year.setVisible(false);
+					helper_range_year.setVisible(false);
+					start_year.setVisible(false);
+					end_year.setVisible(false);
+					sort_by_date.setVisible(false);
+					sort_by_relevance.setVisible(false);
+					dash.setVisible(false);
 				}
 			}
 		});
@@ -204,6 +228,10 @@ public class GUI extends JFrame{
 					next.setEnabled(true);
 					query_1();
 				}
+				else if(query_options.getSelectedItem().equals("Query 2")){
+					Query_2 q=new Query_2(Integer.parseInt(query2.getText()));
+					query_2(q);
+				}
 			}
 		});
 		GridBagConstraints c=new GridBagConstraints();
@@ -289,6 +317,18 @@ public class GUI extends JFrame{
 		c.gridy=7;
 		c.weighty=0.1;
 		menu.add(sort_by_relevance,c);
+		c=new GridBagConstraints();
+		c.fill=GridBagConstraints.NONE;
+		c.gridx=1;
+		c.gridy=7;
+		c.weighty=0.1;
+		menu.add(helper_query2,c);
+		c=new GridBagConstraints();
+		c.fill=GridBagConstraints.NONE;
+		c.gridx=2;
+		c.gridy=7;
+		c.weighty=0.1;
+		menu.add(query2,c);
 		c=new GridBagConstraints();
 		c.fill=GridBagConstraints.NONE;
 		c.gridx=0;
@@ -454,11 +494,32 @@ public class GUI extends JFrame{
 			}
 		}
 		JTable jt=new JTable(data,column);
-	    jt.setBounds(50,50,600,600);  
-		canvas.add(jt);
+		TableColumn column = null;
+		for (int i = 0; i < 9; i++) {
+		    column = jt.getColumnModel().getColumn(i);
+		    if ( i==1) {
+		        column.setPreferredWidth(150); //third column is bigger
+		    }
+		    else if(i==2){
+		    	column.setPreferredWidth(100);
+		    }
+		    else {
+		        column.setPreferredWidth(50);
+		    }
+		}
+//		jt.setBounds(50,50,600,600);  
+		if(DBLP.result_publications.size()>0)
+	    canvas.add(jt);
+		else{
+			JLabel nf=new JLabel("NO RESULT FOUND!");
+			canvas.add(nf);
+		}
 	}
-	public void query_2(int k){
-		Query_2 q=new Query_2(k);
+	public void query_2(Query_2 q){
+		canvas.removeAll();
+		canvas.repaint();
+		canvas.revalidate();
+		q.print_result(canvas,next,prev,answer);
 	}
 	public void query_3(){
 		

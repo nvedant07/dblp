@@ -69,7 +69,7 @@ public class CustomParser {
           		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")){
         		for(int i=0 ; i<authors.size() ; i++){
         			for(String s:t){
-        				if(s.toLowerCase().equals(authors.get(i).toLowerCase())){
+        				if(authors.get(i).toLowerCase().matches("(.*)"+s.toLowerCase()+"(.*)")){
             				Publication temp=new Publication(authors);
             				if(title!=null){
             					temp.setTitle(title);
