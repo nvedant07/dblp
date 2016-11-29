@@ -13,14 +13,13 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-
-/** This is a parser for scanning the www tags for the DBLP XML document 
-*  this is for entity resolution 
-*/
-
+/**
+ * This is the custom implementation of the SAXParser, which wraps the XMLReader,
+ * to read the provodied DBLP XML file, with the required tasks, searching by author www tags,
+ * to perform entity resolution
+ */
 public class WwwParser {
 	private class ConfigHandler extends DefaultHandler {
-
         private Locator locator;
         private String Value;
         private String key;
@@ -33,7 +32,7 @@ public class WwwParser {
         
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
-        }
+        }//!< Handler with all the required fields
         
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
@@ -52,10 +51,6 @@ public class WwwParser {
             insideTag=true;
             Value = "";
           }
-//          else if(!insidewww && rawName.equals("author")){
-//        	  foundAuthor=true;
-//        	  Value="";
-//          }
         }
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
@@ -68,9 +63,6 @@ public class WwwParser {
         				temp.add(s);
         			}
         			DBLP.same_names.add(temp);
-//        			if(!DBLP.same_names.get(DBLP.same_names.size()-1).toString().equals(same_authors.toString())){
-//        				System.out.println("problem");
-//        			}
         		}
         		same_authors.clear();
         	}
@@ -80,18 +72,13 @@ public class WwwParser {
         		}
         		insideTag=false;
         	}
-//        	else if(foundAuthor && !insidewww){
-//        		if(DBLP.author_count.containsKey(Value))DBLP.author_count.put(Value, DBLP.author_count.get(Value)+1);
-//        		else DBLP.author_count.put(Value, 1);
-//        		foundAuthor=false;
-//        	}
-        }
+        }//!< Idententifies the end of the tag, thus complete recording the field
 
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
         	if(insideTag)
             Value += new String(ch, start, length);
-        }
+        }//!< Recording the required field
 
         private void Message(String mode, SAXParseException exception) {
             System.out.println(mode + " Line: " + exception.getLineNumber()
@@ -117,7 +104,9 @@ public class WwwParser {
             throw new SAXException("Fatal Error encountered");
         }
     }
-   
+	/** The function which is called to parse the XML document.
+	* It is called whenever a new query is chosen
+	*/
    WwwParser(String uri) {
       try {
     	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
@@ -126,8 +115,6 @@ public class WwwParser {
 	     ConfigHandler handler = new ConfigHandler();
          parser.getXMLReader().setFeature(
 	          "http://xml.org/sax/features/validation", true);
-//         DBLP.author_to_search=author;
-//         DBLP.result_publications.clear();
          parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());

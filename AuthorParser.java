@@ -5,7 +5,10 @@ import java.util.*;
 import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-
+/**
+ * This is the custom implementation of the SAXParser, which wraps the XMLReader,
+ * to read the provodied DBLP XML file, with the required tasks, to find authora and number of papers published 
+ */
 public class AuthorParser {
    
    private class ConfigHandler extends DefaultHandler {
@@ -28,7 +31,7 @@ public class AuthorParser {
         
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
-        }
+        }//!< Handler with all the required fields
         
         public void print_authors(ArrayList<String> arr){
     		for(int j=0;j<arr.size();j++){
@@ -40,7 +43,7 @@ public class AuthorParser {
     			}
     			
     		}
-    	}
+    	}//!< Displays the required members according to the query.
         
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
@@ -64,7 +67,7 @@ public class AuthorParser {
             Value = "";
           }
           
-        }
+        }//!< Identefies required fields from the XML Document
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
         	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
@@ -90,13 +93,13 @@ public class AuthorParser {
 //        	  }
         	  insideTag=false;
             }																																																																																																																																																																																																																																																																														
-        }
+        }//!< Idententifies the end of the tag, thus complete recording the field
 
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
         	if(insideTag)
             Value += new String(ch, start, length);
-        }
+        }//!< Recording the required field
 
         private void Message(String mode, SAXParseException exception) {
             System.out.println(mode + " Line: " + exception.getLineNumber()
@@ -122,7 +125,9 @@ public class AuthorParser {
             throw new SAXException("Fatal Error encountered");
         }
     }
-   
+   /** The function which is called to parse the XML document.
+    * It is called whenever a new query is chosen
+    */
    AuthorParser(String uri) {
       try {
     	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
@@ -146,5 +151,3 @@ public class AuthorParser {
    }
 
 }
-
-

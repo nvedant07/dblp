@@ -5,12 +5,10 @@ import java.util.*;
 import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-
 /**
  * This is the custom implementation of the SAXParser, which wraps the XMLReader,
- * to read the provodied DBLP XML file, with the required tasks.
+ * to read the provodied DBLP XML file, with the required tasks, searching by author
  */
-
 public class CustomParser {
    
 	Person p=new Person(DBLP.author_to_search);

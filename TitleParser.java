@@ -13,11 +13,10 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
-
-
-/** Title parser, for reading from the XML document
-*  This is useful for simply showing authors and their papers 
-*/
+/**
+ * This is the custom implementation of the SAXParser, which wraps the XMLReader,
+ * to read the provodied DBLP XML file, with the required tasks, to find papers
+ */
 public class TitleParser {
 	private class ConfigHandler extends DefaultHandler {
         private Locator locator;
@@ -38,7 +37,7 @@ public class TitleParser {
         
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
-        }
+        }//!< Handler with all the required fields
         public void print_authors(ArrayList<String> arr){
     		for(int j=0;j<arr.size();j++){
     			if(j==arr.size()-1){
@@ -48,7 +47,7 @@ public class TitleParser {
     				System.out.print(arr.get(j)+",");
     			}		
     		}
-    	}
+    	}//!< Displays the required members according to the query.Only for testing.
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
           String k;
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
@@ -69,7 +68,7 @@ public class TitleParser {
             insideTag=true;
             Value = "";
           }
-        }
+        }//!< Identefies required fields from the XML Document
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
         	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
           		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www"))&&insideMasterTag)
@@ -121,7 +120,6 @@ public class TitleParser {
               authors.clear();
             }
             else if(insideTag){
-//        	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
         			  authors.add(Value);
         		  }
@@ -146,15 +144,14 @@ public class TitleParser {
         		  else if(recordTag.equals("volume")){
         			  volume=Value;
         		  }
-//        	  }
         	  insideTag=false;
           }																																																																																																																																																																																																																																																			
-        }
+        }//!< Idententifies the end of the tag, thus complete recording the field
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
         	if(insideTag)
             Value += new String(ch, start, length);
-        }
+        }//!< Recording the required field
         private void Message(String mode, SAXParseException exception) {
             System.out.println(mode + " Line: " + exception.getLineNumber()
                     + " URI: " + exception.getSystemId() + "\n" + " Message: "
@@ -174,6 +171,9 @@ public class TitleParser {
             throw new SAXException("Fatal Error encountered");
         }
     }
+	/** The function which is called to parse the XML document.
+	   * It is called whenever a new query is chosen
+	   */
    TitleParser(String uri,String title) {
       try {
     	  System.setProperty("jdk.xml.entityExpansionLimit", "0");

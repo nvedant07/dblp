@@ -92,7 +92,17 @@ public class GUI extends JFrame{
 	    dash.setVisible(false);
 	    JButton submit=new JButton("Submit");
 	    submit.setEnabled(false);
+	    JButton refresh=new JButton("Refresh");
 	    
+	    refresh.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	    		year.setText("");
+	    		start_year.setText("");
+	    		end_year.setText("");
+	    		search_query.setText("");
+	    		sort_by_date.setSelected(true);
+	    	}
+	    });
 		this.query_options.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String choice=(String)query_options.getSelectedItem();
@@ -285,6 +295,12 @@ public class GUI extends JFrame{
 		c.gridy=8;
 		c.weighty=0.1;
 		menu.add(submit,c);
+		c=new GridBagConstraints();
+		c.fill=GridBagConstraints.NONE;
+		c.gridx=1;
+		c.gridy=8;
+		c.weighty=0.1;
+		menu.add(refresh,c);
 		mainframe.add(menu,BorderLayout.WEST);
 		mainframe.add(topPanel, BorderLayout.NORTH);
 		mainframe.add(canvas, BorderLayout.EAST);
