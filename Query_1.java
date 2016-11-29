@@ -76,19 +76,19 @@ public class Query_1 {
 			}
 		}
 	}
-	public void return_query(){
-		Scanner in=new Scanner(System.in);
+	public void return_query(String query){
+//		Scanner in=new Scanner(System.in);
 		if(this.search_by_authorname){
-			System.out.println("Enter author name");
-			String author=in.nextLine();
-			DBLP.author_to_search=author;
-			CustomParser p = new CustomParser("dblp.xml",author);
+//			System.out.println("Enter author name");
+//			String query=in.nextLine();
+			DBLP.author_to_search=query;
+			CustomParser p = new CustomParser("dblp.xml",query);
 		}
 		else if(this.search_by_title){
-			System.out.println("Enter title");
-			String title=in.nextLine();
-			DBLP.title_to_search=title;
-			TitleParser t=new TitleParser("dblp.xml",title);
+//			System.out.println("Enter title");
+//			String query=in.nextLine();
+			DBLP.title_to_search=query;
+			TitleParser t=new TitleParser("dblp.xml",query);
 		}
 		
 		if(!this.sort_by_relevance){

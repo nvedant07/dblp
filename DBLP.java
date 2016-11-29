@@ -27,6 +27,7 @@ public class DBLP {
 		while(true){
 			System.out.print("Choose an option:\n1.Query1\n2.Query2\n3.Query3\n4.exit\n");
 			int opt=in.nextInt();
+			String query=null;
 			if(opt==4)break;
 			else if(opt==1){
 				Query_1 q=new Query_1();
@@ -61,6 +62,10 @@ public class DBLP {
 						int end_year=in.nextInt();
 						q.setEnd_year(end_year);
 					}
+					System.out.println("Enter author name");
+					in.nextLine();
+					query=in.nextLine();
+//					System.out.println(query);
 				}
 				else if(opt==2){
 					q.setSearch_by_authorname(false);
@@ -98,8 +103,11 @@ public class DBLP {
 						int end_year=in.nextInt();
 						q.setEnd_year(end_year);
 					}
+					System.out.println("Enter title");
+					in.nextLine();
+					query=in.nextLine();
 				}
-				q.return_query();
+				q.return_query(query);
 			}
 			else if(opt==2){
 				System.out.println("Enter k:");
