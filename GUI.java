@@ -1,8 +1,15 @@
+/**
+ * Authors:
+ * Vedant Nanda 2015114
+ * Arpan Mondal 2015132
+ */
 package dblp;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 
 public class GUI extends JFrame{
@@ -23,62 +30,57 @@ public class GUI extends JFrame{
 		mainframe=new JFrame();
 		
 		topPanel = new JPanel(); //main panel
-//		JPanel waiting=new JPanel();
-//		waiting.setLayout(new GridBagLayout());
-//		waiting.add(new JLabel("Please wait while data loads..."));
-//		startPanel.add(waiting,BorderLayout.LINE_END);
 		menu = new JPanel(new GridBagLayout()); //left side of window		
 		menu.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-//		startPanel.add(menu, BorderLayout.LINE_START);
+		menu.setBackground(Color.white);
 		JLabel label1 = new JLabel("DBLP Query Engine", SwingConstants.CENTER);
 		label1.setFont(new Font("Serif", Font.PLAIN, 32));
-    	label1.setForeground(Color.GRAY);
+    	label1.setForeground(Color.BLACK);
 		topPanel.add(label1, BorderLayout.PAGE_START);
+		topPanel.setBackground(Color.RED);
 		
 		WwwParser w=new WwwParser("dblp.xml");
 		
 		canvas = new JPanel();
-//		String[] column={"S.No.","authors","title","pages","year","volume","journal","Booktitle","url"};
-//		String [][] data={{"1","vedantnanda","100","1997","12-19","ECTA","Book","/jnsjnasjxajsn"}};
-//		JTable table=new JTable(data,column);
-//		table.setBounds(30,40,200,300);
-//		String temp[]={"S.no","authors","title","pages","year","volume","journal","booktitle","url"};
-//		data[0]=temp;
-//	      
-//	    JTable jt=new JTable(data,column);
-//	    jt.setBounds(50,50,600,600);  
-//		canvas.add(jt);
+		canvas.setBackground(Color.YELLOW);
 		
 		lowerPanel=new JPanel();
+		lowerPanel.setBackground(Color.CYAN);
 		answer=new JLabel("Total results: ");
 		prev=new JButton("Prev");
 		next=new JButton("Next");
+		prev.setBackground(Color.BLACK);
+	    prev.setForeground(Color.WHITE);
+	    next.setBackground(Color.BLACK);
+	    next.setForeground(Color.WHITE);
 		lowerPanel.add(prev);
 		lowerPanel.add(answer);
 		lowerPanel.add(next);
-		
-//		canvas.setLayout(new GridLayout(21,8,0,0));
-//		startPanel.add(canvas, BorderLayout.LINE_END);
-//		fillCanvas();
 		
 		String[] choice = { "Choose Query","Query 1", "Query 2", "Query 3"};
 		this.query_options = new JComboBox<String>(choice);
 		String[] q1_options = {"Choose option","Search by Author Name","Search by Title"};
 		q1_box = new JComboBox<String>(q1_options);
 		q1_box.setVisible(false);
-		JTextField search_query=new JTextField(8);
+		JTextField search_query=new JTextField(12);
 		search_query.setVisible(false);
 		JLabel helper_query=new JLabel("Enter Search Query");
 		helper_query.setVisible(false);
+		helper_query.setFont(new Font("Serif", Font.PLAIN, 18));
+    	helper_query.setForeground(Color.BLACK);
 		JTextField year=new JTextField(4);
 		year.setVisible(false);
 		JLabel helper_year=new JLabel("Since Year(leave blank for all years)");
 		helper_year.setVisible(false);
+		helper_year.setFont(new Font("Serif", Font.PLAIN, 18));
+    	helper_year.setForeground(Color.BLACK);
 		JTextField start_year=new JTextField(4);
 		start_year.setVisible(false);
 		JTextField end_year=new JTextField(4);
 		end_year.setVisible(false);
 		JLabel helper_range_year=new JLabel("Range(leave blank for all years)");
+		helper_range_year.setFont(new Font("Serif", Font.PLAIN, 18));
+    	helper_range_year.setForeground(Color.BLACK);
 		helper_range_year.setVisible(false);
 		JRadioButton sort_by_date=new JRadioButton("Sort By Date");
 		sort_by_date.setSelected(true);
@@ -90,11 +92,19 @@ public class GUI extends JFrame{
 	    group.add(sort_by_relevance);
 	    group.add(sort_by_date);
 	    JLabel dash=new JLabel("to    ");
+		dash.setFont(new Font("Serif", Font.PLAIN, 18));
+    	dash.setForeground(Color.BLACK);
 	    dash.setVisible(false);
 	    JButton submit=new JButton("Submit");
 	    submit.setEnabled(false);
+	    submit.setBackground(Color.BLACK);
+	    submit.setForeground(Color.WHITE);
 	    JButton refresh=new JButton("Refresh");
+	    refresh.setBackground(Color.BLACK);
+	    refresh.setForeground(Color.WHITE);
 	    JLabel helper_query2=new JLabel("Enter k");
+		helper_query2.setFont(new Font("Serif", Font.PLAIN, 24));
+    	helper_query2.setForeground(Color.BLACK);
 	    helper_query2.setVisible(false);
 	    JTextField query2=new JTextField(5);
 	    query2.setVisible(false);
@@ -126,6 +136,22 @@ public class GUI extends JFrame{
 					search_query.setVisible(false);
 					helper_year.setVisible(false);
 					year.setVisible(false);
+					helper_range_year.setVisible(false);
+					start_year.setVisible(false);
+					end_year.setVisible(false);
+					sort_by_date.setVisible(false);
+					sort_by_relevance.setVisible(false);
+					dash.setVisible(false);
+				}
+				else if(choice.equals("Query 3")){
+					query2.setVisible(false);
+					helper_query2.setVisible(false);
+					submit.setEnabled(true);
+					q1_box.setVisible(false);
+					helper_query.setVisible(true);
+					search_query.setVisible(true);
+					helper_year.setVisible(true);
+					year.setVisible(true);
 					helper_range_year.setVisible(false);
 					start_year.setVisible(false);
 					end_year.setVisible(false);
@@ -169,7 +195,7 @@ public class GUI extends JFrame{
 		});
 		submit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-//				System.out.println(q1_box.getSelectedItem());
+				int flag=0;
 				if(query_options.getSelectedItem().equals("Query 1")){
 					Query_1 q = new Query_1();
 					if(q1_box.getSelectedItem().equals("Search by Author Name")){
@@ -184,14 +210,20 @@ public class GUI extends JFrame{
 							q.setBw_two_years(true);
 							q.setSince_some_year(false);
 							q.setSort_by_date(false);
-							q.setStart_year(Integer.parseInt(start_year.getText()));
-							q.setEnd_year(Integer.parseInt(end_year.getText()));
+							if(DBLP.isInteger(start_year.getText()) && DBLP.isInteger(end_year.getText())){
+								q.setStart_year(Integer.parseInt(start_year.getText()));
+								q.setEnd_year(Integer.parseInt(end_year.getText()));
+							}
+							else flag=1;
 						}
 						else if(!year.getText().equals("")){
 							q.setBw_two_years(false);
 							q.setSince_some_year(true);
 							q.setSort_by_date(false);
-							q.setYear(Integer.parseInt(year.getText()));
+							if(DBLP.isInteger(year.getText())){
+								q.setYear(Integer.parseInt(year.getText()));
+							}
+							else flag=1;
 						}
 					}
 					else if(q1_box.getSelectedItem().equals("Search by Title")){
@@ -213,24 +245,65 @@ public class GUI extends JFrame{
 						else if(year.getText().equals("") && !start_year.getText().equals("") && !end_year.getText().equals("")){
 							q.setBw_two_years(true);
 							q.setSince_some_year(false);
-							q.setStart_year(Integer.parseInt(start_year.getText()));
-							q.setEnd_year(Integer.parseInt(end_year.getText()));
+							if(DBLP.isInteger(start_year.getText()) && DBLP.isInteger(end_year.getText())){
+								q.setStart_year(Integer.parseInt(start_year.getText()));
+								q.setEnd_year(Integer.parseInt(end_year.getText()));
+							}
+							else flag=1;
 						}
 						else if(!year.getText().equals("")){
 							q.setBw_two_years(false);
 							q.setSince_some_year(true);
-							q.setYear(Integer.parseInt(year.getText()));
+							if(DBLP.isInteger(year.getText())){
+								q.setYear(Integer.parseInt(year.getText()));
+							}
+							else flag=1;
 						}
 					}
-					q.return_query(search_query.getText());
-					prev.setEnabled(false);
-					if(DBLP.result_publications.size()>20)
-					next.setEnabled(true);
-					query_1();
+					if(search_query.getText().equals("")){
+						JOptionPane.showMessageDialog(null,"Please enter a search query");
+					}
+					else if(flag==1){
+						JOptionPane.showMessageDialog(null,"Please enter an integer where expected");
+					}
+					else{
+						q.return_query(search_query.getText());
+						prev.setEnabled(false);
+						if(DBLP.result_publications.size()>20)
+						next.setEnabled(true);
+						query_1();
+					}
 				}
 				else if(query_options.getSelectedItem().equals("Query 2")){
-					Query_2 q=new Query_2(Integer.parseInt(query2.getText()));
-					query_2(q);
+					if(query2.getText().equals("")){
+						JOptionPane.showMessageDialog(null,"Please enter a search query");
+					}
+					else if(!DBLP.isInteger(query2.getText())){
+						JOptionPane.showMessageDialog(null,"Please enter an integer where expected");
+					}
+					else{
+						Query_2 q=new Query_2(Integer.parseInt(query2.getText()));
+						query_2(q);
+					}
+				}
+				else if(query_options.getSelectedItem().equals("Query 3")){
+					if(search_query.getText().equals("")){
+						JOptionPane.showMessageDialog(null,"Please enter a search query");
+					}
+					else if(!DBLP.isInteger(year.getText())){
+						JOptionPane.showMessageDialog(null,"Please enter an integer where expected");
+					}
+					else{
+						DBLP.author_to_search=search_query.getText();
+						Query_3 q=new Query_3(search_query.getText(),Integer.parseInt(year.getText()));
+						canvas.removeAll();
+						canvas.repaint();
+						canvas.revalidate();
+						JLabel predicted=new JLabel("Predicted Value: "+Integer.toString(q.getPredicted()));
+						JLabel real=new JLabel("Real Value: "+Integer.toString(q.getReal()));
+						canvas.add(predicted);
+						canvas.add(real);
+					}
 				}
 			}
 		});
@@ -345,6 +418,9 @@ public class GUI extends JFrame{
 		mainframe.add(topPanel, BorderLayout.NORTH);
 		mainframe.add(canvas, BorderLayout.EAST);
 		mainframe.add(lowerPanel, BorderLayout.SOUTH);
+		JPanel placeholder=new JPanel();
+		placeholder.setBackground(Color.white);
+		mainframe.add(placeholder, BorderLayout.CENTER);
 //		mainframe.add(startPanel);
 		mainframe.setSize(1300,900);
 		mainframe.setLocationRelativeTo(null);
@@ -408,7 +484,6 @@ public class GUI extends JFrame{
 			prev.removeActionListener(l);
 		}
 		prev.addActionListener(new ActionListener(){
-//			int counter=count;
 			public int get_count(){
 				int num=0;
 				for(int i=1;i<21;i++){
@@ -494,7 +569,24 @@ public class GUI extends JFrame{
 			}
 		}
 		JTable jt=new JTable(data,column);
+		//
+		jt.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+	        public void valueChanged(ListSelectionEvent event) {
+	            String sno="S.No."+(String)jt.getValueAt(jt.getSelectedRow(), 0)+"\n";
+	        	String authors="Authors: "+(String)jt.getValueAt(jt.getSelectedRow(), 1)+"\n";
+	        	String title="Title: "+(String)jt.getValueAt(jt.getSelectedRow(), 2)+"\n";
+	        	String pages="Pages: "+(String)jt.getValueAt(jt.getSelectedRow(), 3)+"\n";
+	        	String year="Year: "+(String)jt.getValueAt(jt.getSelectedRow(), 4)+"\n";
+	        	String volume="Volume: "+(String)jt.getValueAt(jt.getSelectedRow(), 5)+"\n";
+	        	String journal="Journal: "+(String)jt.getValueAt(jt.getSelectedRow(), 6)+"\n";
+	        	String booktitle="BookTitle: "+(String)jt.getValueAt(jt.getSelectedRow(), 7)+"\n";
+	        	String url="Url: "+(String)jt.getValueAt(jt.getSelectedRow(), 8)+"\n";
+	        	JOptionPane.showMessageDialog(null, sno+authors+title+pages+year+volume+journal+booktitle+url);
+	        }
+	    });
+		//
 		TableColumn column = null;
+		jt.setRowHeight(35);
 		for (int i = 0; i < 9; i++) {
 		    column = jt.getColumnModel().getColumn(i);
 		    if ( i==1) {
@@ -507,11 +599,11 @@ public class GUI extends JFrame{
 		        column.setPreferredWidth(50);
 		    }
 		}
-//		jt.setBounds(50,50,600,600);  
 		if(DBLP.result_publications.size()>0)
 	    canvas.add(jt);
 		else{
 			JLabel nf=new JLabel("NO RESULT FOUND!");
+			nf.setFont(new Font("Serif", Font.PLAIN, 32));
 			canvas.add(nf);
 		}
 	}

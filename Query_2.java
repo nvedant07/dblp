@@ -1,3 +1,8 @@
+/**
+ * Authors:
+ * Vedant Nanda 2015114
+ * Arpan Mondal 2015132
+ */
 package dblp;
 
 import java.util.*;
@@ -68,7 +73,6 @@ public class Query_2 {
 			next.removeActionListener(l);
 		}
 		next.addActionListener(new ActionListener(){
-//			int counter=count;
 			public int get_count(){
 				int num=0;
 				for(int i=1;i<21;i++){
@@ -105,7 +109,7 @@ public class Query_2 {
 					data[i+1-(20*counter)][1]=answer.get(i);
 				}
 				JTable jt=new JTable(data,column);
-//			    jt.setBounds(50,50,600,600);
+				jt.setRowHeight(35);
 				TableColumn col = null;
 				for (int i = 0; i < 2; i++) {
 				    col = jt.getColumnModel().getColumn(i);
@@ -123,7 +127,6 @@ public class Query_2 {
 			prev.removeActionListener(l);
 		}
 		prev.addActionListener(new ActionListener(){
-//			int counter=count;
 			public int get_count(){
 				int num=0;
 				for(int i=1;i<21;i++){
@@ -158,7 +161,7 @@ public class Query_2 {
 					data[i+1-(20*counter)][1]=answer.get(i);
 				}
 				JTable jt=new JTable(data,column);
-//			    jt.setBounds(50,50,600,600);  
+				jt.setRowHeight(35);  
 				TableColumn col = null;
 				for (int i = 0; i < 2; i++) {
 				    col = jt.getColumnModel().getColumn(i);
@@ -173,7 +176,7 @@ public class Query_2 {
 			}
 		});
 		JTable jt=new JTable(data,column);
-//	    jt.setBounds(50,50,600,600);
+		jt.setRowHeight(35);
 		TableColumn col = null;
 		for (int i = 0; i < 2; i++) {
 		    col = jt.getColumnModel().getColumn(i);
@@ -188,16 +191,13 @@ public class Query_2 {
 		canvas.add(jt);
 		else{
 			JLabel nf=new JLabel("NO RESULT FOUND!");
+			nf.setFont(new Font("Serif", Font.PLAIN, 32));
 			canvas.add(nf);
 		}
 	}
 	public Query_2(int k){
 		this.k=k;
 		AuthorParser par=new AuthorParser("dblp.xml");
-		//int c=DBLP.author_count.get("Chin-Chen Chang");
-		//System.out.println(c);
 		this.resolve();
-		//System.out.println(this.resolved_count.get("Chin-Chen Chang"));
 	}
-	
 }

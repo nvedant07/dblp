@@ -1,3 +1,8 @@
+/**
+ * Authors:
+ * Vedant Nanda 2015114
+ * Arpan Mondal 2015132
+ */
 package dblp;
 
 import java.io.*;
@@ -49,27 +54,36 @@ public class CustomParser {
     	} //!< Displays the required members according to the query.
         
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
-        String k;
-          
-          if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
-                insideMasterTag=true;
-                masterTag=rawName;
-          }
-          else if(insideMasterTag){
-            recordTag=rawName;
-            insideTag=true;
-            Value = "";
-          }
-          
-        } //!< Identefies required fields from the XML Document
+            String k;
+            
+            if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www")) {
+                  insideMasterTag=true;
+                  masterTag=rawName;
+                  if(rawName.equals("www")){
+                  	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
+                            key=k;
+                            if(key.matches("homepages/(.*)")){
+                              insideMasterTag=false;
+                            }
+                        }
+                    }
+            }
+            else if(insideMasterTag){
+              recordTag=rawName;
+              insideTag=true;
+              Value = "";
+            }
+            
+          } //!< Identefies required fields from the XML Document
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
-        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")){
+        	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www"))&&insideMasterTag)
+            {
         		for(int i=0 ; i<authors.size() ; i++){
         			for(String s:t){
-        				if(authors.get(i).toLowerCase().matches("(.*)"+s.toLowerCase()+"(.*)")){
+        				if(s.toLowerCase().equals(authors.get(i).toLowerCase())){
             				Publication temp=new Publication(authors);
             				if(title!=null){
             					temp.setTitle(title);
@@ -101,7 +115,7 @@ public class CustomParser {
               authors.clear();
             }
             else if(insideTag){
-        	  if(!masterTag.equals("www")){
+//        	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
         			  authors.add(Value);
         		  }
@@ -126,7 +140,7 @@ public class CustomParser {
         		  else if(recordTag.equals("volume")){
         			  volume=Value;
         		  }
-        	  }
+//        	  }
         	  insideTag=false;
           }
             																																																																																																																																																																																																																																																																																		
@@ -187,7 +201,4 @@ public class CustomParser {
       }
       
    }
-
 }
-
-
