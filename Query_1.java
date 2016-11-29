@@ -1,6 +1,17 @@
 package dblp;
 
 import java.util.*;
+/** Class for implementing Query 1, which is displaying papers sorted by:
+* -Date
+* -Relevance
+* -Title
+* -Author
+* -Year
+* -Since specific year
+* -Between 2 years
+* -Start year
+* -End year
+*/
 
 public class Query_1 {
 	private boolean sort_by_date;

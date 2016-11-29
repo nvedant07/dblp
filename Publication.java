@@ -2,6 +2,10 @@ package dblp;
 
 import java.util.*;
 
+/** A class for kepping publications of each author 
+*  Also would help for entity resolution
+*/
+
 public class Publication {
 //    static String author_to_search;
     private String title;

@@ -15,6 +15,9 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 
+/** Title parser, for reading from the XML document
+*  This is useful for simply showing authors and their papers 
+*/
 public class TitleParser {
 
 	private class ConfigHandler extends DefaultHandler {

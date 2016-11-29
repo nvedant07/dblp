@@ -1,5 +1,7 @@
 package dblp;
-
+/** Prediction engine!
+* Using Apache prediction library
+*/
 public class Query_3 {
 	private HashMap<String,ArrayList<Integer>> authors=new HashMap<String,ArrayList<Integer>>();
 	//make a seperate parser for query3
