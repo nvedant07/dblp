@@ -14,6 +14,9 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
+/** This is a parser for scanning the www tags for the DBLP XML document 
+*  this is for entity resolution 
+*/
 
 public class WwwParser {
 	private class ConfigHandler extends DefaultHandler {

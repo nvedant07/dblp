@@ -2,6 +2,9 @@ package dblp;
 
 import java.util.*;
 
+/** Query 2, display all authors with more than desired number of publication
+* Hashmap is used, by soring authours with no. of published papers
+*/
 public class Query_2 {
 	private int k;
 	private HashMap<String,Integer> resolved_count=new HashMap<String,Integer>();

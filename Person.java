@@ -2,9 +2,14 @@ package dblp;
 
 import java.util.*;
 
+/** A class for keeping names of authors.
+* Make a bucket list, Makes it easier for searching
+*/
+
 public class Person {
 	
 	private String authorname;
+	
 	public Person(String authorname){
 		this.authorname=authorname;
 	}

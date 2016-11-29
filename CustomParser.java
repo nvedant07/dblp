@@ -6,6 +6,11 @@ import javax.xml.parsers.*;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
+/**
+ * This is the custom implementation of the SAXParser, which wraps the XMLReader,
+ * to read the provodied DBLP XML file, with the required tasks.
+ */
+
 public class CustomParser {
    
 	Person p=new Person(DBLP.author_to_search);
@@ -31,7 +36,7 @@ public class CustomParser {
         
         public void setDocumentLocator(Locator locator) {
             this.locator = locator;
-        }
+        } //!< Handler with all the required fields
         
         public void print_authors(ArrayList<String> arr){
     		for(int j=0;j<arr.size();j++){
@@ -43,23 +48,15 @@ public class CustomParser {
     			}
     			
     		}
-    	}
+    	} //!< Displays the required members according to the query.
         
         public void startElement(String namespaceURI, String localName, String rawName, Attributes atts) throws SAXException {
-          String k;
+        String k;
           
           if (rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www")) {
+        		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")) {
                 insideMasterTag=true;
                 masterTag=rawName;
-                if(rawName.equals("www")){
-                	  if(atts.getLength()>0 && (k=atts.getValue("key"))!=null){
-                          key=k;
-                          if(key.matches("homepages/(.*)")){
-                            insideMasterTag=false;
-                          }
-                      }
-                  }
           }
           else if(insideMasterTag){
             recordTag=rawName;
@@ -67,18 +64,11 @@ public class CustomParser {
             Value = "";
           }
           
-        }
+        } //!< Identefies required fields from the XML Document
 
         public void endElement(String namespaceURI, String localName, String rawName) throws SAXException {
-        	if((rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
-          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article") || rawName.equals("www"))&&insideMasterTag)
-            {//        		if(count==1){
-//    			System.out.println(same_authors.toString());
-//        		count++;
-//        		System.out.println(Person.same_names.size());
-//        		System.out.println(Person.same_names.get(0).toString());
-//    		}
-//        		System.out.println(t.toString());
+        	if(rawName.equals("mastersthesis") || rawName.equals("phdthesis") || rawName.equals("inproceedings") || rawName.equals("proceedings")
+          		  || rawName.equals("book") || rawName.equals("incollection") || rawName.equals("article")){
         		for(int i=0 ; i<authors.size() ; i++){
         			for(String s:t){
         				if(s.toLowerCase().equals(authors.get(i).toLowerCase())){
@@ -113,7 +103,7 @@ public class CustomParser {
               authors.clear();
             }
             else if(insideTag){
-//        	  if(!masterTag.equals("www")){
+        	  if(!masterTag.equals("www")){
         		  if(recordTag.equals("author")||recordTag.equals("editor")){
         			  authors.add(Value);
         		  }
@@ -138,17 +128,17 @@ public class CustomParser {
         		  else if(recordTag.equals("volume")){
         			  volume=Value;
         		  }
-//        	  }
+        	  }
         	  insideTag=false;
           }
             																																																																																																																																																																																																																																																																																		
-        }
+        } //!< Idententifies the end of the tag, thus comple recording the field
 
         public void characters(char[] ch, int start, int length)
                 throws SAXException {
         	if(insideTag)
             Value += new String(ch, start, length);
-        }
+        } //!< Recording the required field
 
         private void Message(String mode, SAXParseException exception) {
             System.out.println(mode + " Line: " + exception.getLineNumber()
@@ -175,19 +165,20 @@ public class CustomParser {
         }
     }
    
-   CustomParser(String uri,String author) {
-      try {
-    	  System.setProperty("jdk.xml.entityExpansionLimit", "0");
-	     SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-	     SAXParser parser = parserFactory.newSAXParser();
-	     ConfigHandler handler = new ConfigHandler();
-         parser.getXMLReader().setFeature(
-	          "http://xml.org/sax/features/validation", true);
-         DBLP.author_to_search=author;
-         DBLP.result_publications.clear();
-         DBLP.author_count.clear();
-//         Person.same_names.clear();
-         parser.parse(new File(uri), handler);
+   /** The function which is called to parse the XML document.
+   * It is called whenever a new query is chosen
+   */
+    CustomParser(String uri,String author) {
+    try {
+        System.setProperty("jdk.xml.entityExpansionLimit", "0");
+        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+        SAXParser parser = parserFactory.newSAXParser();
+        ConfigHandler handler = new ConfigHandler();
+        parser.getXMLReader().setFeature("http://xml.org/sax/features/validation", true);
+        DBLP.author_to_search=author;
+        DBLP.result_publications.clear();
+        DBLP.author_count.clear();
+        parser.parse(new File(uri), handler);
       } catch (IOException e) {
          System.out.println("Error reading URI: " + e.getMessage());
       } catch (SAXException e) {
